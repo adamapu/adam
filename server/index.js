@@ -7,9 +7,13 @@ app.use(cors())
 app.use(express.json())
 const UserModel = require('./models/Users')
 
-mongoose.connect("mongodb://localhost:27017")
+mongoose.connect("mongodb://localhost:27017/CRUL")
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch(err => console.error("❌ MongoDB Connection Error:", err))
+
 
 app.post("/createUser", (req,res)=> {
+  console.log("Received createUser request:", req.body);
     UserModel.create(req.body.name)
     .then (users => res,json(users))
     .catch(err => res,json(err))
