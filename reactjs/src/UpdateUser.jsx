@@ -1,10 +1,10 @@
 import {useState} from "react";
 
-function CreateUsers (){
+function UpdateUsers (){
     return(
         <div>
             <form>
-                <h2>Add User</h2>
+                <h2>Update User</h2>
                 <div className="mb-2">
                     <label htmlFor="">Name</label>
                     <input type="text" placeholder="Enter Name" className="form-control" />
@@ -19,10 +19,10 @@ function CreateUsers (){
                         <input type="text" placeholder="Enter Age" className="form-control"/>
                     </div>
                 </div>
-                <button className= "btn btn-success"> Submit</button>
+                <button className= "btn btn-success"> Update</button>
             </form>
         </div >
     )
 }
 
-export  default  CreateUsers;
+export  default  UpdateUsers;
