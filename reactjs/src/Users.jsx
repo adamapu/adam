@@ -19,22 +19,23 @@ function Users (){
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                        <tbody>
                         {
-                            users.map((user)=>{
-                                return(
-                                <tr>
-                                    <td>{user.Name}</td>
-                                    <td>{user.Email}</td>                
-                                    <td>{user.Age}</td>
-                                    <td><Link to ="/update" className = "btn btn-success">Update</Link>
-                                    <button>Delete</button></td>
+                            users.map((user, index) => {
+                            return (
+                                <tr key={index}>
+                                <td>{user.Name}</td>
+                                <td>{user.Email}</td>                
+                                <td>{user.Age}</td>
+                                <td>
+                                    <Link to="/update" className="btn btn-success">Update</Link>
+                                    <button>Delete</button>
+                                </td>
                                 </tr>
-                                )
-                            }
-                            )
+                            );
+                            })
                         }
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </div >
