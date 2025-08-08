@@ -8,8 +8,8 @@ app.use(express.json())
 const UserModel = require('./models/Users')
 
 mongoose.connect("mongodb://localhost:27017/CRUL")
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error("❌ MongoDB Connection Error:", err))
+  .then(() => console.log(" MongoDB Connected"))
+  .catch(err => console.error(" MongoDB Connection Error:", err))
 
 app.get("/", (req, res) => {
   console.log("Received GET request");
