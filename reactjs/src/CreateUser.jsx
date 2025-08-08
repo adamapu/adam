@@ -5,13 +5,13 @@ import {useNavigate} from 'react-router-dom'
 
 function CreateUsers (){
     const [name, setName] = useState()
-    const [email, setEmail] = useState()
-    const [age, setAge] = useState()
+    const [task, setTask] = useState()
+    const [date, setDate] = useState()
     const navigate = useNavigate()
 
     const Submit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/createUser", {name,email,age})
+        axios.post("http://localhost:3001/createUser", {name,task,date})
         .then (result => {console.log(result) 
             navigate('/')})
         .catch(err => console.log(err))
@@ -28,15 +28,15 @@ function CreateUsers (){
                         onChange = {(e)=> setName(e.target.value)} />
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="">Email</label>
-                        <input type="email" placeholder="Enter Email" className="form-control" 
-                        onChange = {(e)=> setEmail(e.target.value)}/>
+                        <label htmlFor="">TaskName</label>
+                        <input type="text" placeholder="Enter Task" className="form-control" 
+                        onChange = {(e)=> setTask(e.target.value)}/>
                     </div>
                     <div>
                         <div className="mb-2">
-                            <label htmlFor="">Age</label>
-                            <input type="text" placeholder="Enter Age" className="form-control"
-                            onChange = {(e)=> setAge(e.target.value)}/>
+                            <label htmlFor="">Date</label>
+                            <input type="date" placeholder="Enter Date" className="form-control"
+                            onChange = {(e)=> setDate(e.target.value)}/>
                         </div>
                     </div>
                     <button className= "btn btn-success"> Submit</button>

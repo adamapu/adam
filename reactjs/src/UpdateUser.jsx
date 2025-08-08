@@ -8,8 +8,8 @@ import axios from 'axios';
 function UpdateUsers (){
     const {id} = useParams();
     const [name, setName] = useState()
-    const [email, setEmail] = useState()
-    const [age, setAge] = useState()
+    const [task, setTask] = useState()
+    const [date, setDate] = useState()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -17,8 +17,8 @@ function UpdateUsers (){
         .then(result => {
             console.log(result.data)
             setName(result.data.name)
-            setEmail(result.data.email)
-            setAge(result.data.age)
+            setTask(result.data.task)
+            setDate(result.data.date)
         })
         .catch(err => console.log(err))
     }, [])
@@ -27,8 +27,8 @@ function UpdateUsers (){
         e.preventDefault();
         const updatedUser = {
             name: name,
-            email: email,
-            age: age
+            task: task,
+            date: date
         };
         axios.put("http://localhost:3001/updateUser/"+id, updatedUser)
         .then(result => {
@@ -48,15 +48,15 @@ function UpdateUsers (){
                     value = {name} onChange = {(e)=> setName(e.target.value)} />
                 </div>
                 <div className="mb-2">
-                    <label htmlFor="">Email</label>
-                    <input type="email" placeholder="Enter Email" className="form-control"
-                    value = {email} onChange = {(e)=> setEmail(e.target.value)} />
+                    <label htmlFor="">Task</label>
+                    <input type="text" placeholder="Enter Task" className="form-control"
+                    value = {task} onChange = {(e)=> setTask(e.target.value)} />
                 </div>
                 <div>
                     <div className="mb-2">
-                        <label htmlFor="">Age</label>
-                        <input type="text" placeholder="Enter Age" className="form-control"
-                        value = {age} onChange = {(e)=> setAge(e.target.value)} />
+                        <label htmlFor="">Date</label>
+                        <input type="date" placeholder="Enter Date" className="form-control"
+                        value = {date} onChange = {(e)=> setAge(e.target.value)} />
                     </div>
                 </div>
                 <button className= "btn btn-success"> Update</button>
