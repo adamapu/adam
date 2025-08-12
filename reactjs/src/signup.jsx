@@ -42,7 +42,7 @@ function Signup(){
     return(
     <div className= "d-flex justify-content-center align-items-center bg-secondary vh-100">
         <div className="bg-white p-3 rounded w-25">
-            <h2>Register</h2>
+            <h2>Welcome</h2>
             <form>
                 <div className="mb-3">
                     <label htmlFor="name">
@@ -73,7 +73,6 @@ function Signup(){
                 </div>
                     <button type="button" className = "btn btn-success w-100 rounded-0" onClick={handleSubmit}>Register</button>
             </form>
-                <p>Already Have an Account</p>
                     <button type="button" className = "btn btn-success w-100 rounded-0" onClick={handleLogin}>Log In</button>
         </div>
     </div>
