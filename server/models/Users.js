@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const TaskSchema = new mongoose.Schema({
+  userid: String,
   name: String,
   task: String,
   date: Date
 });
 
-const UserModel = mongoose.model("Tasks", UserSchema);
-export default UserModel;
+const TaskModel = mongoose.model("Tasks", TaskSchema);
+export default TaskModel;

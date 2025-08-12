@@ -5,35 +5,38 @@ import {useEffect} from "react";
 import axios from 'axios';
 
 
-function UpdateUsers (){
+function UpdateTasks (){
     const {id} = useParams();
     const [name, setName] = useState()
     const [task, setTask] = useState()
     const [date, setDate] = useState()
+    const [userid, setUserid] = useState();
     const navigate = useNavigate()
 
     useEffect(() => {
-        axios.get("http://localhost:3001/getUser/"+id)
+        axios.get("http://localhost:3001/updateTask/"+id)
         .then(result => {
             console.log(result.data)
             setName(result.data.name)
             setTask(result.data.task)
             setDate(result.data.date)
+            setUserid(result.data.userid)
         })
         .catch(err => console.log(err))
     }, [])
 
     const Update = (e) => {
         e.preventDefault();
-        const updatedUser = {
+        const updatedTask = {
             name: name,
             task: task,
-            date: date
+            date: date,
+            userid: userid
         };
-        axios.put("http://localhost:3001/updateUser/"+id, updatedUser)
+        axios.put("http://localhost:3001/updateTask/"+id, updatedTask)
         .then(result => {
             console.log(result.data);
-            navigate('/')
+            navigate(`/tasks/` + userid);
         })
         .catch(err => console.log(err))
     }
@@ -41,22 +44,22 @@ function UpdateUsers (){
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
             <div className ="w-50 bg-red rounded p-3">
             <form onSubmit={Update}>
-                <h2>Update User</h2>
+                <h2>Update Task</h2>
                 <div className="mb-2">
                     <label htmlFor="">Name</label>
-                    <input type="text" placeholder="Enter Name" className="form-control"
-                    value = {name} onChange = {(e)=> setName(e.target.value)} />
+                    <input type="text" className="form-control" required
+                    value = {name||""} onChange = {(e)=> setName(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor="">Task</label>
-                    <input type="text" placeholder="Enter Task" className="form-control"
-                    value = {task} onChange = {(e)=> setTask(e.target.value)} />
+                    <input type="text" className="form-control" required
+                    value = {task||""} onChange = {(e)=> setTask(e.target.value)} />
                 </div>
                 <div>
                     <div className="mb-2">
                         <label htmlFor="">Date</label>
-                        <input type="date" placeholder="Enter Date" className="form-control"
-                        value = {date} onChange = {(e)=> setAge(e.target.value)} />
+                        <input type="date"  className="form-control" aria-required
+                        value = {date||""} onChange = {(e)=> setDate(e.target.value)} />
                     </div>
                 </div>
                 <button className= "btn btn-success"> Update</button>
@@ -66,4 +69,4 @@ function UpdateUsers (){
     )
 }
 
-export  default  UpdateUsers;
+export  default  UpdateTasks;

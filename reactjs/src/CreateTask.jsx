@@ -1,19 +1,20 @@
 import {useState} from "react";
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 
-
-function CreateUsers (){
+function CreateTask (){
     const [name, setName] = useState()
     const [task, setTask] = useState()
     const [date, setDate] = useState()
+    const { id } = useParams();
+
     const navigate = useNavigate()
 
     const Submit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/createUser", {name,task,date})
+        axios.post("http://localhost:3001/createTask", {name,task,date, userid: id})
         .then (result => {console.log(result) 
-            navigate('/')})
+            navigate(`/tasks/${id}`)})
         .catch(err => console.log(err))
     }
     
@@ -46,4 +47,4 @@ function CreateUsers (){
     )
 }
 
-export  default  CreateUsers;
+export  default  CreateTask;

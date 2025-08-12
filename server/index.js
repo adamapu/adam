@@ -4,65 +4,129 @@ import cors from 'cors';
 
 // Import your models using ESM syntax. It's good practice to include the .js extension.
 import EmployeeModel from "./models/Employee.js";
-import UserModel from './models/Users.js';
+import TaskModel from './models/Users.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.listen(3001, () => {
+  console.log("server is running hooray");
+});
+
 mongoose.connect("mongodb://localhost:27017/CRUL")
   .then(() => console.log(" MongoDB Connected"))
   .catch(err => console.error(" MongoDB Connection Error:", err));
 
-app.get("/", (req, res) => {
-  console.log("Received GET request");
-  UserModel.find({})
-    .then(users => res.json(users))
-    .catch(err => res.json({ error: "Error fetching users", details: err }));
-});
+// app.get("/", (req, res) => {
+//   console.log("Received GET request");
+//   TaskModel.find({})
+//     .then(users => res.json(users))
+//     .catch(err => res.json({ error: "Error fetching users", details: err }));
+// });
 
-app.get("/getUser/:id", (req, res) => {
-  const id = req.params.id;
-  console.log(`Received request to get user with ID: ${id}`);
-  UserModel.findById({ _id: id })
-    .then(user => {
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+app.get("/updateTask/:id", (req, res) => {
+  const id = req.params.id; // This is the task ID from the URL
+  console.log(`Received request to get tasks for task ID: ${id}`);
+
+  TaskModel.findOne({_id: id }) // find ALL tasks that belong to this user
+    .then(tasks => {
+      if (!tasks || tasks.length === 0) {
+        return res.status(404).json({ error: "No record for this task" });
       }
-      res.json(user);
+      res.json(tasks);
     })
-    .catch(err => res.status(500).json({ error: "Error fetching user", details: err }));
+    .catch(err => 
+      res.status(500).json({ 
+        error: "Error fetching tasks for this task", 
+        details: err 
+      })
+    );
 });
 
-app.put("/updateUser/:id", (req, res) => {
+app.get("/getTask/:id", (req, res) => {
+  const id = req.params.id; // This is the user ID from the URL
+  console.log(`Received request to get tasks for user ID: ${id}`);
+
+  TaskModel.find({userid: id }) // find ALL tasks that belong to this user
+    .then(tasks => {
+      if (!tasks || tasks.length === 0) {
+        return res.status(404).json({ error: "No tasks found for this user" });
+      }
+      res.json(tasks);
+    })
+    .catch(err => 
+      res.status(500).json({ 
+        error: "Error fetching tasks for this user", 
+        details: err 
+      })
+    );
+});
+
+
+app.put("/updateTask/:id", (req, res) => {
   const id = req.params.id;
-  UserModel.findByIdAndUpdate({ _id: id }, { name: req.body.name, task: req.body.task, age: req.body.task })
+  TaskModel.findByIdAndUpdate({ _id: id }, { name: req.body.name, task: req.body.task, age: req.body.task })
     .then(users => res.json(users))
     .catch(err => res.json(err));
 });
 
-app.delete("/deleteUser/:id", (req, res) => {
+app.delete("/deleteTask/:id", (req, res) => {
   const id = req.params.id;
-  console.log(`Received request to delete user with ID: ${id}`);
-  UserModel.findByIdAndDelete({ _id: id })
+  console.log(`Received request to delete task with ID: ${id}`);
+  TaskModel.findByIdAndDelete({ _id: id })
     .then(users => res.json(users))
     .catch(err => res.json(err));
 });
 
-app.post("/createUser", (req, res) => {
+app.post("/createTask", (req, res) => {
   console.log("Received createUser request:", req.body);
-  UserModel.create(req.body)
+  TaskModel.create(req.body)
     .then(users => res.json(users))
     .catch(err => res.json(err));
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // here is the part for login API
+
 app.post("/register", (req, res) => {
   EmployeeModel.create(req.body)
     .then(employees => res.json(employees))
     .catch(err => res.json(err));
 });
 
-app.listen(3001, () => {
-  console.log("server is running hooray");
+app.post("/login", (req, res) => {
+  const { name, email, password } = req.body;
+
+  EmployeeModel.findOne({ name: name })
+    .then(user => {
+      if (user) {
+        if (user.email === email) {
+          if (user.password === password) {
+            res.json({message: "Success", id: user._id});
+          } else {
+            res.json("password incorrect");
+          }
+        } else {
+          res.json("email incorrect");
+        }
+      } else {
+        res.json("username incorrect");
+      }
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });

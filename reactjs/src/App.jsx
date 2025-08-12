@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import './App.css'
-import{BrowserRouter, Routes, Route} from 'react-router-dom'
+import{BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import CreateUsers from './CreateUser'
-import UpdateUsers from './UpdateUser'
-import Users from './Users'
+import CreateTask from './CreateTask'
+import UpdateTasks from './UpdateTask'
+import Task from './Task'
 import Signup from './signup'
-import LogIn from './login'
 
 
 
@@ -17,15 +15,15 @@ function App() {
       <div>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<Signup/>}> </Route>
-            <Route path='/login' element={<LogIn/>}> </Route>
-            <Route path='/users' element={<Users/>}> </Route>
-            <Route path='/create' element={<CreateUsers/>}> </Route>
-            <Route path='/update/:id' element={<UpdateUsers/>}> </Route> 
+            <Route path='/' element={<Navigate to="/register" />} />
+            <Route path='/register' element={<Signup/>}> </Route>
+            <Route path='/tasks/:id' element={<Task/>}> </Route>
+            <Route path='/create/:id' element={<CreateTask/>}> </Route>
+            <Route path='/update/:id' element={<UpdateTasks/>}> </Route> 
           </Routes>
         </BrowserRouter>
       </div>
   )
 }
 
-export default App
+export default App;
