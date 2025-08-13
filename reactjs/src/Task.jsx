@@ -56,7 +56,7 @@ function Task() {
                     </tbody>
                 </table>
                 <p></p>
-                 <button className = "bg-red rounded p-3" onClick={()=> {navigate (`/register`)}}>Log out</button>
+                 <button className = "bg-red rounded p-3" onClick={()=> {navigate (`/login`)}}>Log out</button>
             </div>
         </div>
     );
