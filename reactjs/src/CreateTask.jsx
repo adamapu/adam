@@ -41,7 +41,9 @@ function CreateTask (){
                         </div>
                     </div>
                     <button className= "btn btn-success"> Submit</button>
+                    <p> </p>
                 </form>
+                 <button className = "bg-grey rounded p-3" onClick={()=> {navigate (`/tasks/${id}`)}}>Back</button>
             </div>
         </div >
     )

@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import "./App.css"; 
 
 function Task() {
     const { id } = useParams(); // Logged-in user ID
     const [tasks, setTask] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:3001/getTask/${id}`)
@@ -23,7 +25,7 @@ function Task() {
 
     return (
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
-            <div className="w-50 bg-red rounded p-3">
+            <div className="w-50 bg-Black rounded p-3">
                 <Link to={`/create/${id}`} className="btn btn-success">Add +</Link>
                 <table className="table">
                     <thead>
@@ -39,7 +41,11 @@ function Task() {
                             <tr key={index}>
                                 <td>{task.name}</td>
                                 <td>{task.task}</td>
-                                <td>{task.date}</td>
+                                <td>
+                                {task.date
+                                    ? new Date(task.date).toISOString().split("T")[0]
+                                    : ""}
+                                </td>                                
                                 <td>
                                     <Link to={`/update/${task._id}`} className="btn btn-success">Update</Link>
                                     <button className="btn btn-danger"
@@ -49,6 +55,8 @@ function Task() {
                         ))}
                     </tbody>
                 </table>
+                <p></p>
+                 <button className = "bg-red rounded p-3" onClick={()=> {navigate (`/register`)}}>Log out</button>
             </div>
         </div>
     );

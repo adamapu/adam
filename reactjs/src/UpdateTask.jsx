@@ -19,7 +19,7 @@ function UpdateTasks (){
             console.log(result.data)
             setName(result.data.name)
             setTask(result.data.task)
-            setDate(result.data.date)
+            setDate(result.data.date ? result.data.date.split("T")[0] : "");
             setUserid(result.data.userid)
         })
         .catch(err => console.log(err))
@@ -58,12 +58,14 @@ function UpdateTasks (){
                 <div>
                     <div className="mb-2">
                         <label htmlFor="">Date</label>
-                        <input type="date"  className="form-control" aria-required
+                        <input type="date"  className="form-control" aria-required = "true" required
                         value = {date||""} onChange = {(e)=> setDate(e.target.value)} />
                     </div>
                 </div>
                 <button className= "btn btn-success"> Update</button>
+                <p></p>
             </form>
+             <button className = "bg-grey rounded p-3" onClick={()=> {navigate (`/tasks/${userid}`)}}>Back</button>
         </div >
         </div>
     )
