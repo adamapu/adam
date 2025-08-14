@@ -5,6 +5,7 @@ import UpdateTasks from './UpdateTask'
 import Task from './Task'
 import Login from './login'
 import Signup from './signup'
+import EditProfile from './editprofile'
 
 
 function App() {
@@ -18,7 +19,9 @@ function App() {
             <Route path='/signup' element={<Signup/>}> </Route>
             <Route path='/tasks/:id' element={<Task/>}> </Route>
             <Route path='/create/:id' element={<CreateTask/>}> </Route>
-            <Route path='/update/:id' element={<UpdateTasks/>}> </Route> 
+            <Route path='/update/:id' element={<UpdateTasks/>}> </Route>
+            <Route path='/editprofile/:id' element={<EditProfile/>}> </Route> 
+
           </Routes>
         </BrowserRouter>
       </div>

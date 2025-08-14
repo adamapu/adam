@@ -10,6 +10,7 @@ function UpdateTasks (){
     const [name, setName] = useState()
     const [task, setTask] = useState()
     const [date, setDate] = useState()
+    const [status, setStatus] = useState()
     const [userid, setUserid] = useState();
     const navigate = useNavigate()
 
@@ -19,6 +20,7 @@ function UpdateTasks (){
             console.log(result.data)
             setName(result.data.name)
             setTask(result.data.task)
+            setStatus(result.data.status)
             setDate(result.data.date ? result.data.date.split("T")[0] : "");
             setUserid(result.data.userid)
         })
@@ -31,8 +33,23 @@ function UpdateTasks (){
             name: name,
             task: task,
             date: date,
+            status: status,
             userid: userid
         };
+
+        const message = `
+            Please confirm the task details:
+
+            Name: ${name}
+            Task: ${task}
+            Date: ${date}
+            Status: ${status}
+                `;
+
+        const isConfirmed = window.confirm(message);
+            if (!isConfirmed) {
+                return; // Stop if user cancels
+            }
         axios.put("http://localhost:3001/updateTask/"+id, updatedTask)
         .then(result => {
             console.log(result.data);
@@ -60,6 +77,18 @@ function UpdateTasks (){
                         <label htmlFor="">Date</label>
                         <input type="date"  className="form-control" aria-required = "true" required
                         value = {date||""} onChange = {(e)=> setDate(e.target.value)} />
+                    </div>
+                </div>
+                <div>
+                    <div className="mb-2">
+                    <label htmlFor="status">Status</label><br />
+                        <select id="status" classname="form-control rounded-3" 
+                        required value={status} 
+                        onChange={(e) => setStatus(e.target.value)}>
+                            <option value="">Select status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Complete</option>
+                            </select>
                     </div>
                 </div>
                 <button className= "btn btn-success"> Update</button>

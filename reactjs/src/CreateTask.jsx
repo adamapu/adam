@@ -12,7 +12,19 @@ function CreateTask (){
 
     const Submit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/createTask", {name,task,date, userid: id})
+            const message = `
+            Please confirm the task details:
+
+            Name: ${name}
+            Task: ${task}
+            Date: ${date}
+                `;
+
+                const isConfirmed = window.confirm(message);
+                if (!isConfirmed) {
+                    return; // Stop if user cancels
+                }
+        axios.post("http://localhost:3001/createTask", {name,task,date, userid: id, status: "Pending"})
         .then (result => {console.log(result) 
             navigate(`/tasks/${id}`)})
         .catch(err => console.log(err))
@@ -25,18 +37,18 @@ function CreateTask (){
                     <h2>Add User</h2>
                     <div className="mb-2">
                         <label htmlFor="">Name</label>
-                        <input type="text" placeholder="Enter Name" className="form-control" 
+                        <input type="text" placeholder="Enter Name" className="form-control" required
                         onChange = {(e)=> setName(e.target.value)} />
                     </div>
                     <div className="mb-2">
                         <label htmlFor="">TaskName</label>
-                        <input type="text" placeholder="Enter Task" className="form-control" 
+                        <input type="text" placeholder="Enter Task" className="form-control"  required
                         onChange = {(e)=> setTask(e.target.value)}/>
                     </div>
                     <div>
                         <div className="mb-2">
                             <label htmlFor="">Date</label>
-                            <input type="date" placeholder="Enter Date" className="form-control"
+                            <input type="date" placeholder="Enter Date" className="form-control" required
                             onChange = {(e)=> setDate(e.target.value)}/>
                         </div>
                     </div>

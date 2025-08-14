@@ -4,36 +4,54 @@ import axios from 'axios';
 import "./App.css"; 
 
 function Task() {
-    const { id } = useParams(); // Logged-in user ID
+    const { id } = useParams();
     const [tasks, setTask] = useState([]);
     const navigate = useNavigate();
+    const [name, setName] = useState();
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/getTask/${id}`)
-            .then(result => setTask(result.data))
+        axios.get(`http://localhost:3001/getTask/${id}`) 
+            .then(result => 
+                setTask(result.data,
+                setName(result.data[0].name),
+                ))
             .catch(err => console.log(err));
-    }, [id]);
+    }, [id]
+);
 
-    const handleDelete = (taskId) => {
-        axios.delete(`http://localhost:3001/deleteTask/${taskId}`)
-            .then(() => {
-                setTask(tasks.filter(task => task._id !== taskId)); 
-            })
-            .catch(err => console.log(err));
-    }
+    const handleDelete = (task) => {
+    const msg = `
+    Please confirm deletion of the task:
 
+    Name: ${task.name || "(no name)"}
+    Task: ${task.task || "(no task)"}
+    Date: ${task.date ? new Date(task.date).toISOString().split("T")[0] : "" || "(no date)"}
+        `;
+
+    const isConfirmed = window.confirm(msg);
+    if (!isConfirmed) return;
+
+    axios.delete(`http://localhost:3001/deleteTask/${task._id}`)
+        .then(() => {
+            setTask(tasks.filter(t => t._id !== task._id)); 
+        })
+        .catch(err => console.log(err));
+    };
 
     return (
-        <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
+        
+        <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">  
             <div className="w-50 bg-Black rounded p-3">
+                {tasks.length > 0 && ( <h2 className="text-white text-center mb-3">Welcome {name}</h2>)}
                 <Link to={`/create/${id}`} className="btn btn-success">Add +</Link>
-                <table className="table">
+                <table className="table table-bordered text-center border-dark">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>TaskName</th>
                             <th>Date</th>
                             <th>Action</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,15 +59,14 @@ function Task() {
                             <tr key={index}>
                                 <td>{task.name}</td>
                                 <td>{task.task}</td>
+                                <td>{task.date ? new Date(task.date).toISOString().split("T")[0] : ""}</td>
                                 <td>
-                                {task.date
-                                    ? new Date(task.date).toISOString().split("T")[0]
-                                    : ""}
-                                </td>                                
+                                    {task.status}
+                                </td>
                                 <td>
                                     <Link to={`/update/${task._id}`} className="btn btn-success">Update</Link>
                                     <button className="btn btn-danger"
-                                        onClick={() => handleDelete(task._id)}>Delete</button>
+                                        onClick={() => handleDelete(task)}>Delete</button>
                                 </td>
                             </tr>
                         ))}
@@ -57,6 +74,7 @@ function Task() {
                 </table>
                 <p></p>
                  <button className = "bg-red rounded p-3" onClick={()=> {navigate (`/login`)}}>Log out</button>
+                <button className = "bg-grey rounded p-3" onClick={()=> {navigate (`/editprofile/${id}`)}}>Edit Profile</button>
             </div>
         </div>
     );

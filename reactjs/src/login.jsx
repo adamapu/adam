@@ -22,59 +22,29 @@ function Login() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleLogin = (e) => {
+  e.preventDefault();
+  axios.post("http://localhost:3001/login", { name, email, password })
+    .then((result) => {
+      if (result.data.message === "Success") {
+        alert("Login Successfully.");
+        navigate(`/tasks/${result.data.id}`);
+      } else {
+        alert(result.data);
+      }
+    })
+    .catch((err) => {
+      console.error("Login error:", err);
+      alert("An error occurred during login. Please try again.");
+    });
+};
 
-    // Validate before sending
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Invalid email format");
-      return;
-    }
-
-    axios
-      .post("http://localhost:3001/register", { name, email, password })
-      .then((result) => {
-        alert("Register successfully. Redirecting you to the welcome page to login.");
-        console.log(result);
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response && err.response.data && err.response.data.message) {
-          alert(err.response.data.message);
-        } else {
-          console.error(err);
-        }
-      });
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    axios
-      .post("http://localhost:3001/login", { name, email, password })
-      .then((result) => {
-        console.log(result.data);
-
-        if (result.data.message === "Success") {
-          alert("Login Successfully.")
-          navigate(`/tasks/${result.data.id}`);
-        } else {
-          alert(result.data);
-        }
-      })
-      .catch((err) => {
-        console.error("Login error:", err);
-        alert("An error occurred during login. Please try again.");
-      });
-  };
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>Welcome</h2>
-        <form>
-          {/* Name */}
+        <form onSubmit={handleLogin}>
           <div className="mb-3">
             <label htmlFor="name">
               <strong>Name</strong>
@@ -85,6 +55,7 @@ function Login() {
               placeholder="Enter Name"
               autoComplete="on"
               name="name"
+              required
               className="form-control rounded-3"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -102,6 +73,7 @@ function Login() {
               placeholder="Enter Email"
               autoComplete="on"
               name="email"
+              required
               className="form-control rounded-3"
               value={email}
               onChange={(e) => {
@@ -126,6 +98,7 @@ function Login() {
               autoComplete="off"
               name="password"
               className="form-control rounded-3"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{ paddingRight: "40px" }}
@@ -135,20 +108,20 @@ function Login() {
               style={{
                 position: "absolute",
                 right: "10px",
-                top: "50%",
+                top: "65%",
                 transform: "translateY(-50%)",
                 cursor: "pointer",
                 color: "#888",
               }}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20}/>}
             </span>
           </div>
         {/* Login Button */}
         <button
-          type="button"
+          type="submit"
           className="btn btn-success w-100 rounded-0"
-          onClick={handleLogin}
+          
         >
           Log In
         </button>
