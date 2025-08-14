@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 // Import your models using ESM syntax. It's good practice to include the .js extension.
-import EmployeeModel from "./models/Employee.js";
-import TaskModel from './models/Users.js';
+import UserModel from "./models/User.js";
+import TaskModel from './models/Task.js';
 
 const app = express();
 app.use(cors());
@@ -59,7 +59,7 @@ app.get("/getTask/:id", (req, res) => {
 
 app.put("/updateTask/:id", (req, res) => {
   const id = req.params.id;
-  TaskModel.findByIdAndUpdate({ _id: id }, { name: req.body.name, task: req.body.task, date: req.body.date })
+  TaskModel.findByIdAndUpdate({ _id: id }, { name: req.body.name, task: req.body.task, date: req.body.date, status: req.body.status })
     .then(users => res.json(users))
     .catch(err => res.json(err));
 });
@@ -82,16 +82,6 @@ app.post("/createTask", (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 // here is the part for login API
 
 app.post("/register", async (req, res) => {
@@ -99,11 +89,11 @@ app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
 
     // 1. Check if any of them already exists
-    const existingUser = await EmployeeModel.findOne({
+    const existingUser = await UserModel.findOne({
       $or: [
         { name: name },
         { email: email },
-        { password: password } // ⚠ Not recommended to check password like this in real apps (hash passwords instead)
+        { password: password }
       ]
     });
 
@@ -112,7 +102,7 @@ app.post("/register", async (req, res) => {
     }
 
     // 2. Create the new user
-    const newUser = await EmployeeModel.create({ name, email, password });
+    const newUser = await UserModel.create({ name, email, password });
     return res.status(201).json(newUser);
 
   } catch (err) {
@@ -121,11 +111,9 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 app.post("/login", (req, res) => {
   const { name, email, password } = req.body;
-
-  EmployeeModel.findOne({ name: name })
+  UserModel.findOne({ name: name })
     .then(user => {
       if (user) {
         if (user.email === email) {
@@ -144,4 +132,90 @@ app.post("/login", (req, res) => {
     .catch(err => {
       res.json(err);
     });
+});
+
+app.post("/signup", async (req, res) => {
+  try {
+    const { name, email, password, age, gender } = req.body;
+
+    // Check if email already exists
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    // Create the new user
+    const newUser = await UserModel.create({
+      name,
+      email,
+      password,
+      age,
+      gender
+    });
+
+    return res.status(201).json({ 
+      message: "User created successfully", 
+      user: newUser 
+    });
+
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// Edit user profile
+// Update user profile by ID
+app.put("/users/:userId", async (req, res) => {
+  try {
+    const { name, age, gender, password } = req.body;
+
+    // Validate gender
+    const allowedGenders = ["Male", "Female", "Prefer not to say"];
+    if (gender && !allowedGenders.includes(gender)) {
+      return res.status(400).json({ message: "Invalid gender option" });
+    }
+
+    // Validate age
+    if (age !== undefined && (isNaN(age) || age < 0)) {
+      return res.status(400).json({ message: "Age must be a positive number" });
+    }
+
+    // Update user
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.userId,
+      { name, age, gender, password }, // ⚠ Will overwrite fields if empty values are sent
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// Get user profile by ID
+app.get("/users/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("Error fetching user profile:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
 });
