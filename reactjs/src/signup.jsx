@@ -38,7 +38,7 @@ function Signup() {
       })
       .catch(err => {
         console.log(err);
-        alert("Gmail is already registered.");
+        alert(err.response?.data?.message || "Something went wrong");
       });
   };
 
@@ -140,20 +140,41 @@ function Signup() {
               {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
             </span>
           </div>
-            {/* Age */}
-            <div className="mb-2">
-            <label htmlFor="age">Age</label>
+          {/*Age*/}
+          <div>
+            <label htmlFor="dob">Date of Birth</label>
             <input
-                id="age"
-                type="number"
-                placeholder="Enter Age"
-                className="form-control rounded-3"
-                required
-                min="1"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
+              id="dob"
+              type="date"
+              autoComplete='off'
+              onChange={(e) => {
+                const dobValue = e.target.value;
+                const today = new Date();
+                const birthDate = new Date(dobValue);
+                let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                  calculatedAge--;
+                }
+                // Validation: Only set if age is between 0 and 120
+                if (calculatedAge >= 0 && calculatedAge <= 120) {
+                  setAge(calculatedAge);
+                } else {
+                  setAge("");
+                }
+              }}
+              className="form-control rounded-3"
+              max={new Date().toISOString().split("T")[0]} // prevent selecting future dates
             />
-            </div>
+            {age !== "" && (
+              <p>
+                Age:{" "}
+                <strong style={{ color: age >= 0 && age <= 120 ? "green" : "red" }}>
+                  {age >= 0 && age <= 120 ? age : "Invalid age"}
+                </strong>
+              </p>
+            )}
+          </div>
 
             {/* Gender */}
             <div className="mb-2">

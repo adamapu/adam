@@ -86,18 +86,40 @@ function EditProfile() {
               disabled
             />
           </div>
-
-          {/* Age */}
-          <div className="mb-2">
-            <label>Age</label>
+          
+          <div>
+            <label htmlFor="dob">Date of Birth</label>
             <input
-              type="number"
+              id="dob"
+              type="date"
+              autoComplete='off'
+              onChange={(e) => {
+                const dobValue = e.target.value;
+                const today = new Date();
+                const birthDate = new Date(dobValue);
+                let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                  calculatedAge--;
+                }
+                // Validation: Only set if age is between 0 and 120
+                if (calculatedAge >= 0 && calculatedAge <= 120) {
+                  setAge(calculatedAge);
+                } else {
+                  setAge("");
+                }
+              }}
               className="form-control rounded-3"
-              value={age}
-              min="1"
-              onChange={(e) => setAge(e.target.value)}
-              required
+              max={new Date().toISOString().split("T")[0]} // prevent selecting future dates
             />
+            {age !== "" && (
+              <p>
+                Age:{" "}
+                <strong style={{ color: age >= 0 && age <= 120 ? "green" : "red" }}>
+                  {age >= 0 && age <= 120 ? age : "Invalid age"}
+                </strong>
+              </p>
+            )}
           </div>
 
           {/* Gender */}

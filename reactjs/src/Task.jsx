@@ -7,17 +7,25 @@ function Task() {
     const { id } = useParams();
     const [tasks, setTask] = useState([]);
     const navigate = useNavigate();
-    const [name, setName] = useState();
+    const [username, setUsername] = useState();
 
     useEffect(() => {
         axios.get(`http://localhost:3001/getTask/${id}`) 
-            .then(result => 
-                setTask(result.data,
-                setName(result.data[0].name),
-                ))
+            .then(result => {
+                console.log("Fetched tasks:", result.data);
+                setTask(result.data);
+            })
             .catch(err => console.log(err));
-    }, [id]
-);
+    }, [id]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:3001/getusername/${id}`)
+            .then(userresult => {
+                console.log("Fetched username:", userresult.data);
+                setUsername(userresult.data);
+            })
+            .catch(err => console.log(err));
+    }, [id]);
 
     const handleDelete = (task) => {
     const msg = `
@@ -42,7 +50,7 @@ function Task() {
         
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">  
             <div className="w-50 bg-Black rounded p-3">
-                {tasks.length > 0 && ( <h2 className="text-white text-center mb-3">Welcome {name}</h2>)}
+                {tasks.length > 0 && ( <h2 className="text-white text-center mb-3" >Welcome {username}</h2>)}
                 <Link to={`/create/${id}`} className="btn btn-success">Add +</Link>
                 <table className="table table-bordered text-center border-dark">
                     <thead>
