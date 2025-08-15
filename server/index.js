@@ -82,33 +82,53 @@ app.post("/createTask", (req, res) => {
 
 
 
+
+
+
 // here is the part for login API
 
-app.post("/register", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+// app.post("/register", async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
 
-    // 1. Check if any of them already exists
-    const existingUser = await UserModel.findOne({
-      $or: [
-        { name: name },
-        { email: email },
-        { password: password }
-      ]
+//     // 1. Check if any of them already exists
+//     const existingUser = await UserModel.findOne({
+//       $or: [
+//         { name: name },
+//         { email: email },
+//         { password: password }
+//       ]
+//     });
+
+//     if (existingUser) {
+//       return res.status(400).json({ message: "Name, email, or password already exists" });
+//     }
+
+//     // 2. Create the new user
+//     const newUser = await UserModel.create({ name, email, password });
+//     return res.status(201).json(newUser);
+
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+app.get("/getusername/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  UserModel.findOne({ _id: id })
+    .then(user => {
+      if (user) {
+        res.json(user.name);
+        console.log(user.name)
+      } else {
+        res.status(404).json("User not found");
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err.message);
     });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "Name, email, or password already exists" });
-    }
-
-    // 2. Create the new user
-    const newUser = await UserModel.create({ name, email, password });
-    return res.status(201).json(newUser);
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
 });
 
 app.post("/login", (req, res) => {
@@ -134,14 +154,22 @@ app.post("/login", (req, res) => {
     });
 });
 
+
+
 app.post("/signup", async (req, res) => {
   try {
     const { name, email, password, age, gender } = req.body;
 
     // Check if email already exists
-    const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+    const existingEmail = await UserModel.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email is already registered" });
+    }
+
+    // Check for existing name
+    const existingName = await UserModel.findOne({ name });
+    if (existingName) {
+      return res.status(400).json({ message: "Name is already taken" });
     }
 
     // Create the new user
