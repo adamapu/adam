@@ -44,17 +44,14 @@ Copy code
 ## ⚡ Getting Started
 
 ### 1. Clone the repository
-```bash
 git clone https://github.com/adamapu/adam.git
 cd adam
 2. Backend Setup (Server)
-bash
 Copy code
 cd adam
 npm install
 Run backend:
 
-bash
 Copy code
 npm run dev
 Backend runs at:
@@ -63,7 +60,6 @@ Backend runs at:
 3. Frontend Setup (React + Vite)
 Open a new terminal:
 
-bash
 Copy code
 cd reactjs
 npm install
