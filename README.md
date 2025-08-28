@@ -46,27 +46,23 @@ Copy code
 ### 1. Clone the repository
 git clone https://github.com/adamapu/adam.git
 cd adam
-2. Backend Setup (Server)
-Copy code
+
+### 2. Backend Setup (Server)
 cd adam
 npm install
 Run backend:
 
-Copy code
 npm run dev
 Backend runs at:
 👉 http://localhost:5000 (default, check your index.js for port)
 
-3. Frontend Setup (React + Vite)
+### 3. Frontend Setup (React + Vite)
 Open a new terminal:
 
-Copy code
 cd reactjs
 npm install
 Run frontend:
 
-bash
-Copy code
 npm run dev
 Frontend runs at:
 👉 http://localhost:5173
