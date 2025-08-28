@@ -36,8 +36,6 @@ reactjs/ → Frontend (React + Vite)
 ├── package.json
 └── ...
 
-yaml
-Copy code
 
 ---
 
@@ -47,6 +45,8 @@ Copy code
 git clone https://github.com/adamapu/adam.git
 cd adam
 
+---
+
 ### 2. Backend Setup (Server)
 cd adam
 npm install
@@ -55,6 +55,8 @@ Run backend:
 npm run dev
 Backend runs at:
 👉 http://localhost:5000 (default, check your index.js for port)
+
+---
 
 ### 3. Frontend Setup (React + Vite)
 Open a new terminal:
@@ -67,14 +69,18 @@ npm run dev
 Frontend runs at:
 👉 http://localhost:5173
 
-🔗 Usage Flow
+---
+
+### 🔗 Usage Flow
 Start backend server first (npm run dev inside adam/)
 
 Then start frontend (npm run dev inside reactjs/)
 
 Open the frontend in browser → it will connect to backend APIs
 
-🧩 Scripts
+---
+
+### 🧩 Scripts
 Backend (adam/)
 npm run dev → start backend with nodemon (dev mode)
 
